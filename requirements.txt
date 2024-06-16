@@ -1,0 +1,4 @@
+supabase
+matplotlib
+firebase_admin
+streamlit_extras
