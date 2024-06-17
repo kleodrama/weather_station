@@ -12,6 +12,7 @@ response = supabase.table('roof_temperature').select("*").execute()
 
 st.header("Weather Station")
 
+st.write('last temperature is ', response.data[-1]["temperature"], 'at', response.data[-1]["datetime"])
 
-st.write(response)
+st.write(response.data)
 
