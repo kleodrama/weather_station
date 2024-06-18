@@ -4,9 +4,6 @@ from supabase import create_client, Client
 import numpy as np
 import pandas as pd
 
-# import pretty
-from ago import human
-
 from datetime import datetime, timedelta
 import pytz
 tz = pytz.timezone('Europe/Athens')

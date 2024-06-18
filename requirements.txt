@@ -3,3 +3,4 @@ matplotlib
 firebase_admin
 streamlit_extras
 numpy
+pandas
