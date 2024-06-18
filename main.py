@@ -49,7 +49,7 @@ with tab_day:
     df['Ώρα'] = df['Ημερομηνία/ώρα'].dt.strftime('%H:%M')
     td = datetime.today()
     st.write("Σήμερα ", td.weekday(), td.day, td.month, td.year)
-    day = st.date_input("Επιλογή ημέρας", value="default_value_today", on_change=None, format="DD/MM/YYYY")
+    day = st.date_input("Επιλογή ημέρας", value="default_value_today", format="DD/MM/YYYY")
     next_day = day + timedelta(days=1)
     st.write("Επιλεγμένη ημερομηνία: ", day)
     filtered_df = df.loc[(df["Ημερομηνία/ώρα"] >= day.strftime('%Y-%m/%d')) & (df["Ημερομηνία/ώρα"] <=
