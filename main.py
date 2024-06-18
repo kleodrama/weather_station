@@ -50,8 +50,8 @@ with tab_day:
     td = datetime.today()
     st.write("Σήμερα ", td.weekday(), td.day, td.month, td.year)
     day = st.date_input("Επιλογή ημέρας"
-                        # , value="default_value_today"
-                        # , format="DD/MM/YYYY"
+                        , value="default_value_today"
+                        , format="DD/MM/YYYY"
                         )
     next_day = day + timedelta(days=1)
     st.write("Επιλεγμένη ημερομηνία: ", day)
