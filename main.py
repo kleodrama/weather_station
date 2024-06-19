@@ -7,9 +7,9 @@ import pandas as pd
 from datetime import datetime, timedelta
 import pytz
 
-import locale
+# import locale
 
-locale.setlocale(locale.LC_TIME, "el_GR")  # Greek
+# locale.setlocale(locale.LC_TIME, "el_GR")  # Greek
 tz = pytz.timezone('Europe/Athens')
 
 st.set_page_config(
