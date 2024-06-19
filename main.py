@@ -78,8 +78,10 @@ with col1:
     st.metric(label="Θερμοκρασία", value=f'{last_temp} °C', delta=f"{delta_temps} °C")
 
 with col2:
-    f'μέγιστη: **{today_max["Θερμοκρασία"]} °C** :clock1: :red-background[{today_max["Ημερομηνία/ώρα"].strftime('%H:%M')}]'
-    f'ελάχιστη: **{today_min["Θερμοκρασία"]} °C** :clock1: :blue-background[{today_min["Ημερομηνία/ώρα"].strftime('%H:%M')}]'
+    ttt = today_max["Ημερομηνία/ώρα"].strftime('%H:%M')
+    ddd = today_min["Ημερομηνία/ώρα"].strftime('%H:%M')
+    f'μέγιστη: **{today_max["Θερμοκρασία"]} °C** :clock1: :red-background[{ttt}]'
+    f'ελάχιστη: **{today_min["Θερμοκρασία"]} °C** :clock1: :blue-background[{ddd}]'
     '---'
     f'χθες ίδια ώρα: **{yesterday_same_time} °C**'
 
