@@ -169,9 +169,29 @@ with tab_month:
     with c_month_3:
         st.button(label="Επόμενος Μήνας", on_click=go_to_next_month)
 
-    st.line_chart(filtered_df_month, x="Ημέρα του μήνα", y="Θερμοκρασία")
-    st.write(filtered_df_month)
-
+    # st.line_chart(filtered_df_month, x="Ημέρα του μήνα", y="Θερμοκρασία")
+    all_max = list()
+    all_min = list()
+    all_mean = list()
+    for i in pd.unique(filtered_df_month["Ημέρα του μήνα"]):
+        current_values = df.loc[filtered_df_month["Ημέρα του μήνα"] == f'{i}']
+        current_max = current_values["Θερμοκρασία"].max()
+        all_max.append(current_max)
+        current_min = current_values["Θερμοκρασία"].min()
+        all_min.append(current_min)
+        current_mean = round(current_values["Θερμοκρασία"].mean(), 1)
+        all_mean.append(current_mean)
+    min_max_mean = pd.DataFrame(
+        data={
+            'Ημέρα': pd.unique(filtered_df_month["Ημέρα του μήνα"]),
+            'Ελάχιστη': all_min,
+            'Μέση': all_mean,
+            'Μέγιστη': all_max
+        })
+    chart_data = pd.DataFrame(min_max_mean, columns=["Ημέρα", "Ελάχιστη", "Μέση", "Μέγιστη"])
+    st.line_chart(chart_data, x="Ημέρα", y=["Ελάχιστη", "Μέση", "Μέγιστη"])
+    st.subheader(f'{month}/{year}', divider='rainbow')
+    st.dataframe(min_max_mean, column_order=["Ημέρα", "Ελάχιστη", "Μέση", "Μέγιστη"], hide_index=True, use_container_width=True)
 
 with tab_year:
     # if 'yyear' in st.session_state:
@@ -192,8 +212,11 @@ with tab_year:
         x='Μήν/Έτος',
         y='Θερμοκρασία'
     )
+    st.subheader(f'{option}', divider='rainbow')
     st.altair_chart(chart, theme="streamlit", use_container_width=True)
 # st.write(data)
+
+'---'
 
 st.image('https://lh3.googleusercontent.com/a/ACg8ocKf_BEQXNtWgvgzj2Jump2CMCB5dCo95RWSdQdsh_67Ga3prkYU=s288-c-no',
          caption='Designed by Kleanthis Xenitidis', width=100)
