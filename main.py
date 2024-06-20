@@ -110,28 +110,31 @@ with tab_day:
     st.write("**Επιλεγμένη ημερομηνία:** ", f'{day.day}/{day.month}/{day.year}')
     filtered_df = df.loc[(df["Ημερομηνία/ώρα"] >= day.strftime('%Y-%m/%d')) & (df["Ημερομηνία/ώρα"] <=
                                                                                next_day.strftime('%Y-%m/%d'))]
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        # filtered_df_max = filtered_df.loc[today_temps["Θερμοκρασία"].idxmax()]
-        filtered_df_max = filtered_df[filtered_df["Θερμοκρασία"] == filtered_df["Θερμοκρασία"].max()]
-        st.write(f'**Μέγιστη:** {filtered_df_max.iloc[0]["Θερμοκρασία"]} °C')
-        for i in range(filtered_df_max["Θερμοκρασία"].count()):
-            st.write(f':clock1: {filtered_df_max.iloc[i]["Ώρα"]}')
-    with c2:
-        # filtered_df_max = filtered_df.loc[today_temps["Θερμοκρασία"].idxmax()]
-        filtered_df_min = filtered_df[filtered_df["Θερμοκρασία"] == filtered_df["Θερμοκρασία"].min()]
-        st.write(f'**Ελάχιστη:** {filtered_df_min.iloc[0]["Θερμοκρασία"]} °C')
-        for i in range(filtered_df_min["Θερμοκρασία"].count()):
-            st.write(f':clock1: {filtered_df_min.iloc[i]["Ώρα"]}')
-    with c3:
-        st.write(f'**Μέση:** {round(filtered_df["Θερμοκρασία"].mean(), 1)} °C')
-    st.line_chart(filtered_df, y="Θερμοκρασία", x='Ώρα')
-    st.dataframe(filtered_df
-                 .style.highlight_max(axis=0, subset=['Θερμοκρασία'], props='background-color:red;')
-                 .highlight_min(axis=0, subset=['Θερμοκρασία'], props='background-color:blue;'),
-                 column_order=["Ώρα", "Θερμοκρασία"],
-                 hide_index=True,
-                 use_container_width=True)
+    if filtered_df.size > 0:
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            # filtered_df_max = filtered_df.loc[today_temps["Θερμοκρασία"].idxmax()]
+            filtered_df_max = filtered_df[filtered_df["Θερμοκρασία"] == filtered_df["Θερμοκρασία"].max()]
+            st.write(f'**Μέγιστη:** {filtered_df_max.iloc[0]["Θερμοκρασία"]} °C')
+            for i in range(filtered_df_max["Θερμοκρασία"].count()):
+                st.write(f':clock1: {filtered_df_max.iloc[i]["Ώρα"]}')
+        with c2:
+            # filtered_df_max = filtered_df.loc[today_temps["Θερμοκρασία"].idxmax()]
+            filtered_df_min = filtered_df[filtered_df["Θερμοκρασία"] == filtered_df["Θερμοκρασία"].min()]
+            st.write(f'**Ελάχιστη:** {filtered_df_min.iloc[0]["Θερμοκρασία"]} °C')
+            for i in range(filtered_df_min["Θερμοκρασία"].count()):
+                st.write(f':clock1: {filtered_df_min.iloc[i]["Ώρα"]}')
+        with c3:
+            st.write(f'**Μέση:** {round(filtered_df["Θερμοκρασία"].mean(), 1)} °C')
+        st.line_chart(filtered_df, y="Θερμοκρασία", x='Ώρα')
+        st.dataframe(filtered_df
+                    .style.highlight_max(axis=0, subset=['Θερμοκρασία'], props='background-color:red;')
+                    .highlight_min(axis=0, subset=['Θερμοκρασία'], props='background-color:blue;'),
+                    column_order=["Ώρα", "Θερμοκρασία"],
+                    hide_index=True,
+                    use_container_width=True)
+    else:
+        st.subheader("Δεν υπάρχουν δεδομένα για αυτήν την ημερμηνία.")
 
 
 def go_to_next_month():
