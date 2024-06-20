@@ -160,6 +160,8 @@ with tab_month:
         selected_month = datetime.now()
         st.session_state['month'] = datetime.now().month
         st.session_state['year'] = datetime.now().year
+        month = st.session_state['month']
+        year = st.session_state['year']
     filtered_df_month = df.loc[(df["Μήνας/Έτος"] == selected_month.strftime('%m/%Y'))]
     c_month_1, c_month_2, c_month_3 = st.columns(3)
     with c_month_2:
