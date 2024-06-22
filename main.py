@@ -219,6 +219,7 @@ with tab_year:
     )
     st.subheader(f'{option}', divider='rainbow')
     st.altair_chart(chart, theme="streamlit", use_container_width=True)
+
 # st.write(data)
 
 '---'
