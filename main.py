@@ -37,7 +37,6 @@ data = response.data
 list_datetimes = list()
 list_temperatures = list()
 
-# '''TODO: function that converts data retrieved from database to pandas dataframe'''
 
 for i in data:
     t = i["datetime"]
@@ -210,9 +209,10 @@ with tab_year:
     filtered_df_year = df.loc[df["Έτος"] == f'{option}']
     for i in range(12):
         filtered_df_year_per_month = df.loc[df["Μήν/Έτος"] == f'{i+1}/{option}']
-        f':sunny: Μήνας: {i+1}/{option}'
-        f':gray[**Μέση** :thermometer: {round(filtered_df_year_per_month["Θερμοκρασία"].mean(), 1)}] | :red[**Μέγιστη** :thermometer: {round(filtered_df_year_per_month["Θερμοκρασία"].max(), 1)}] | :blue[**Ελάχιστη** :thermometer: {round(filtered_df_year_per_month["Θερμοκρασία"].min(), 1)}]'
-        '---'
+        if filtered_df_year_per_month.size > 0:
+            f':sunny: Μήνας: {i+1}/{option}'
+            f':gray[**Μέση** :thermometer: {round(filtered_df_year_per_month["Θερμοκρασία"].mean(), 1)}] | :red[**Μέγιστη** :thermometer: {round(filtered_df_year_per_month["Θερμοκρασία"].max(), 1)}] | :blue[**Ελάχιστη** :thermometer: {round(filtered_df_year_per_month["Θερμοκρασία"].min(), 1)}]'
+            '---'
     chart = alt.Chart(filtered_df_year).mark_boxplot(extent='min-max').encode(
         x='Μήν/Έτος',
         y='Θερμοκρασία'
