@@ -192,6 +192,7 @@ with tab_month:
             'Μέση': all_mean,
             'Μέγιστη': all_max
         })
+    min_max_mean = min_max_mean.sort_values(by=['Ημέρα'])
     chart_data = pd.DataFrame(min_max_mean, columns=["Ημέρα", "Ελάχιστη", "Μέση", "Μέγιστη"])
     st.line_chart(chart_data, x="Ημέρα", y=["Ελάχιστη", "Μέση", "Μέγιστη"])
     st.subheader(f'{month}/{year}', divider='rainbow')
