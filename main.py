@@ -128,7 +128,8 @@ with tab_day:
         st.line_chart(filtered_df, y="Θερμοκρασία", x='Ώρα')
         st.dataframe(filtered_df
                     .style.highlight_max(axis=0, subset=['Θερμοκρασία'], props='background-color:red;')
-                    .highlight_min(axis=0, subset=['Θερμοκρασία'], props='background-color:blue;'),
+                    .highlight_min(axis=0, subset=['Θερμοκρασία'], props='background-color:blue;')
+                     .format(precision=1),
                     column_order=["Ώρα", "Θερμοκρασία"],
                     hide_index=True,
                     use_container_width=True)
