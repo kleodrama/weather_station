@@ -179,7 +179,9 @@ with tab_month:
     all_min = list()
     all_mean = list()
     for i in pd.unique(filtered_df_month["Ημέρα του μήνα"]):
-        current_values = df.loc[filtered_df_month["Ημέρα του μήνα"] == f'{i}']
+        # st.write(filtered_df_month)
+        # st.write(filtered_df_month["Ημέρα του μήνα"] == f'{i}')
+        current_values = filtered_df_month[filtered_df_month["Ημέρα του μήνα"] == f'{i}']
         current_max = current_values["Θερμοκρασία"].max()
         all_max.append(current_max)
         current_min = current_values["Θερμοκρασία"].min()
