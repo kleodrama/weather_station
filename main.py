@@ -34,8 +34,14 @@ supabase = create_client(url, key)
 response = supabase.table('roof_temperature').select("*").execute()
 data = response.data
 
+response = supabase.table('roof_humidity').select("*").execute()
+data_humidity = response.data
+
 list_datetimes = list()
 list_temperatures = list()
+
+list_h_datetimes = list()
+list_humidities = list()
 
 
 for i in data:
@@ -49,9 +55,23 @@ for i in data:
     list_temperatures.append(round(float(i["temperature"]), 1))
 
 
+for i in data_humidity:
+    t = i["datetime"]
+    if '.' in t:
+        t = datetime.strptime(t, "%Y-%m-%dT%H:%M:%S.%f%z")
+    else:
+        t = datetime.strptime(t, "%Y-%m-%dT%H:%M:%S%z")
+    list_h_datetimes.append(t.astimezone(tz))
+
+    list_humidities.append(int(i["humidity"]))
+
+
 last_temp = list_temperatures[-1]
 pre_last_temp = list_temperatures[-2]
 delta_temps = round(last_temp - pre_last_temp, 1)
+
+
+last_humidity = list_humidities[-1]
 
 df = pd.DataFrame(data={
     'Ημερομηνία/ώρα': list_datetimes,
@@ -87,6 +107,18 @@ with col2:
     f'ελάχιστη: :thermometer: **{today_min["Θερμοκρασία"]} °C** :clock1: :blue-background[{ddd}]'
     # st.markdown("***")
     f'χθες ίδια ώρα: :thermometer: **{yesterday_same_time} °C**'
+
+'---'
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.write(list_h_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
+    st.write(f'Υγρασία :sparkle: :blue[{last_humidity}] :blue[%]')
+with col2:
+    st.write(list_h_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
+    st.write(f'Ταχύτητα ανέμου')
+with col3:
+    st.write(list_h_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
+    st.write(f'Ατμοσφαιρική πίεση')
 
 '---'
 
