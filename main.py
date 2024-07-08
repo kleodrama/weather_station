@@ -37,11 +37,17 @@ data = response.data
 response = supabase.table('roof_humidity').select("*").execute()
 data_humidity = response.data
 
+response = supabase.table('roof_pressure').select("*").execute()
+data_pressure = response.data
+
 list_datetimes = list()
 list_temperatures = list()
 
 list_h_datetimes = list()
 list_humidities = list()
+
+list_p_datetimes = list()
+list_pressures = list()
 
 
 for i in data:
@@ -66,12 +72,25 @@ for i in data_humidity:
     list_humidities.append(int(i["humidity"]))
 
 
+for i in data_pressure:
+    t = i["datetime"]
+    if '.' in t:
+        t = datetime.strptime(t, "%Y-%m-%dT%H:%M:%S.%f%z")
+    else:
+        t = datetime.strptime(t, "%Y-%m-%dT%H:%M:%S%z")
+    list_p_datetimes.append(t.astimezone(tz))
+
+    list_pressures.append(int(i["pressure"]))
+
+
 last_temp = list_temperatures[-1]
 pre_last_temp = list_temperatures[-2]
 delta_temps = round(last_temp - pre_last_temp, 1)
 
 
 last_humidity = list_humidities[-1]
+
+last_pressure = list_pressures[-1]
 
 df = pd.DataFrame(data={
     'Ημερομηνία/ώρα': list_datetimes,
@@ -117,8 +136,8 @@ with col2:
     st.write(list_h_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
     st.write(f'Ταχύτητα ανέμου')
 with col3:
-    st.write(list_h_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
-    st.write(f'Ατμοσφαιρική πίεση')
+    st.write(list_p_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
+    st.write(f'Ατμ. πίεση :large_purple_circle: :red[{last_pressure/100} hPa]')
 
 '---'
 
