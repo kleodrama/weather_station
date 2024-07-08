@@ -138,7 +138,6 @@ with col2:
 with col3:
     st.write(list_p_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
     st.write(f'Ατμ. πίεση :large_purple_circle: :red[{last_pressure/100} hPa]')
-
 '---'
 
 # st.write(df)
