@@ -87,10 +87,10 @@ last_temp = list_temperatures[-1]
 pre_last_temp = list_temperatures[-2]
 delta_temps = round(last_temp - pre_last_temp, 1)
 
-
 last_humidity = list_humidities[-1]
 
 last_pressure = list_pressures[-1]
+
 
 df = pd.DataFrame(data={
     'Ημερομηνία/ώρα': list_datetimes,
@@ -102,6 +102,18 @@ df['Μήνας/Έτος'] = df['Ημερομηνία/ώρα'].dt.strftime('%m/%Y
 df['Μήν/Έτος'] = df['Ημερομηνία/ώρα'].dt.strftime('%-m/%Y')
 df['Έτος'] = df['Ημερομηνία/ώρα'].dt.strftime('%Y')
 df['Ημέρα του μήνα'] = df['Ημερομηνία/ώρα'].dt.strftime('%d')
+
+
+df_pressure = pd.DataFrame(data={
+    'Ημερομηνία/ώρα': list_p_datetimes,
+    'Πίεση': list_pressures
+})
+df_pressure['Ημερομηνία'] = df_pressure['Ημερομηνία/ώρα'].dt.strftime('%d %b %y')
+df_pressure['Ώρα'] = df_pressure['Ημερομηνία/ώρα'].dt.strftime('%H:%M')
+df_pressure['Μήνας/Έτος'] = df_pressure['Ημερομηνία/ώρα'].dt.strftime('%m/%Y')
+df_pressure['Μήν/Έτος'] = df_pressure['Ημερομηνία/ώρα'].dt.strftime('%-m/%Y')
+df_pressure['Έτος'] = df_pressure['Ημερομηνία/ώρα'].dt.strftime('%Y')
+df_pressure['Ημέρα του μήνα'] = df_pressure['Ημερομηνία/ώρα'].dt.strftime('%d')
 
 today_temps = df.loc[df["Ημερομηνία"] == datetime.today().strftime('%d %b %y')]
 today_max = today_temps.loc[today_temps["Θερμοκρασία"].idxmax()]
@@ -159,6 +171,8 @@ with tab_day:
     st.write("**Επιλεγμένη ημερομηνία:** ", f'{day.day}/{day.month}/{day.year}')
     filtered_df = df.loc[(df["Ημερομηνία/ώρα"] >= day.strftime('%Y-%m/%d')) & (df["Ημερομηνία/ώρα"] <=
                                                                                next_day.strftime('%Y-%m/%d'))]
+    filtered_df_pressure = df_pressure.loc[(df_pressure["Ημερομηνία/ώρα"] >= day.strftime('%Y-%m/%d')) &
+                                           (df_pressure["Ημερομηνία/ώρα"] <= next_day.strftime('%Y-%m/%d'))]
     if filtered_df.size > 0:
         c1, c2, c3 = st.columns(3)
         with c1:
@@ -176,11 +190,32 @@ with tab_day:
         with c3:
             st.write(f'**Μέση:** {round(filtered_df["Θερμοκρασία"].mean(), 1)} °C')
         st.line_chart(filtered_df, y="Θερμοκρασία", x='Ώρα')
+
+    if filtered_df_pressure.size > 0:
+        min_val = filtered_df_pressure.loc[filtered_df_pressure["Πίεση"].idxmin()]["Πίεση"]
+        max_val = filtered_df_pressure.loc[filtered_df_pressure["Πίεση"].idxmax()]["Πίεση"]
+        c = (
+            alt.Chart(filtered_df_pressure)
+            .mark_line()
+            .encode(alt.Y('Πίεση').scale(domain=(min_val, max_val)), x="Ώρα")
+        )
+
+        st.altair_chart(c, use_container_width=True)
+        # st.line_chart(filtered_df_pressure, y="Πίεση", x='Ώρα')
+    if filtered_df.size > 0:
         st.dataframe(filtered_df
                     .style.highlight_max(axis=0, subset=['Θερμοκρασία'], props='background-color:red;')
                     .highlight_min(axis=0, subset=['Θερμοκρασία'], props='background-color:blue;')
                      .format(precision=1),
                     column_order=["Ώρα", "Θερμοκρασία"],
+                    hide_index=True,
+                    use_container_width=True)
+    if filtered_df_pressure.size > 0:
+        st.dataframe(filtered_df_pressure
+                    .style.highlight_max(axis=0, subset=['Πίεση'], props='background-color:red;')
+                    .highlight_min(axis=0, subset=['Πίεση'], props='background-color:blue;')
+                     .format(precision=1),
+                    column_order=["Ώρα", "Πίεση"],
                     hide_index=True,
                     use_container_width=True)
     else:
