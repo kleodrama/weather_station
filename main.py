@@ -40,6 +40,9 @@ data_humidity = response.data
 response = supabase.table('roof_pressure').select("*").execute()
 data_pressure = response.data
 
+response = supabase.table('roof_wind_speed').select("*").execute()
+data_wind_speed = response.data
+
 list_datetimes = list()
 list_temperatures = list()
 
@@ -48,6 +51,9 @@ list_humidities = list()
 
 list_p_datetimes = list()
 list_pressures = list()
+
+list_ws_datetimes = list()
+list_wind_speeds = list()
 
 
 for i in data:
@@ -83,6 +89,17 @@ for i in data_pressure:
     list_pressures.append(int(i["pressure"]))
 
 
+for i in data_wind_speed:
+    t = i["datetime"]
+    if '.' in t:
+        t = datetime.strptime(t, "%Y-%m-%dT%H:%M:%S.%f%z")
+    else:
+        t = datetime.strptime(t, "%Y-%m-%dT%H:%M:%S%z")
+    list_ws_datetimes.append(t.astimezone(tz))
+
+    list_wind_speeds.append(round(float(i["wind_speed"]), 1))
+
+
 last_temp = list_temperatures[-1]
 pre_last_temp = list_temperatures[-2]
 delta_temps = round(last_temp - pre_last_temp, 1)
@@ -90,6 +107,8 @@ delta_temps = round(last_temp - pre_last_temp, 1)
 last_humidity = list_humidities[-1]
 
 last_pressure = list_pressures[-1]
+
+last_wind_speed = list_wind_speeds[-1]
 
 
 df = pd.DataFrame(data={
@@ -157,8 +176,8 @@ with col1:
     st.write(list_h_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
     st.write(f'Υγρασία :sparkle: :blue[{last_humidity}] :blue[%]')
 with col2:
-    st.write(list_h_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
-    st.write(f'Ταχύτητα ανέμου')
+    st.write(list_ws_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
+    st.write(f'Ταχύτητα ανέμου :dash: :green[{last_wind_speed} m/s]')
 with col3:
     st.write(list_p_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
     st.write(f'Ατμ. πίεση :large_purple_circle: :red[{last_pressure/100} hPa]')
