@@ -9,6 +9,11 @@ import pytz
 
 import altair as alt
 
+
+import json
+import requests
+from streamlit_lottie import st_lottie
+
 # import locale
 
 # locale.setlocale(locale.LC_TIME, "el_GR")  # Greek
@@ -24,6 +29,37 @@ st.set_page_config(
         'About': "# Μετεωρολογικός Σταθμός. *Raspberry Pi!* --- Kleanthis Xenitidis"
     }
 )
+
+
+def m_s_to_bf(ms):
+    if 0 <= ms < 0.3:
+        return 0
+    elif 0.3 <= ms < 1.6:
+        return 1
+    elif 1.6 <= ms < 3.4:
+        return 2
+    elif 3.4 <= ms < 5.5:
+        return 3
+    elif 5.5 <= ms < 8.0:
+        return 4
+    elif 8.0 <= ms < 10.8:
+        return 5
+    elif 10.8 <= ms < 13.9:
+        return 6
+    elif 13.9 <= ms < 17.2:
+        return 7
+    elif 17.2 <= ms < 20.8:
+        return 8
+    elif 20.8 <= ms < 24.5:
+        return 9
+    elif 24.5 <= ms < 28.5:
+        return 10
+    elif 28.5 <= ms < 32.7:
+        return 11
+    elif ms > 32.7:
+        return 12
+    else:
+        return None
 
 
 url = st.secrets["supabase"]["url"]
@@ -155,6 +191,21 @@ yesterday_temps = df.loc[(df["Ημερομηνία"] == (datetime.today() - time
 yesterday_same_time = yesterday_temps.iloc[0]["Θερμοκρασία"]
 
 
+
+url = requests.get("https://lottie.host/22af83a1-dcdb-48a1-aebd-ebb0b74eb186/QroEcRnHao.json")
+url_json = dict()
+if url.status_code == 200:
+    url_json = url.json()
+else:
+    print("Error in the URL")
+st_lottie(url_json,
+          reverse=True,
+          height=150,
+          width=150,
+          speed=1,
+          loop=True,
+          quality='high')
+
 st.subheader(':sunny::cloud::umbrella::snowflake:')
 
 col1, col2 = st.columns(2)
@@ -173,14 +224,57 @@ with col2:
 '---'
 col1, col2, col3 = st.columns(3)
 with col1:
-    st.write(list_h_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
-    st.write(f'Υγρασία :sparkle: :blue[{last_humidity}] :blue[%]')
-with col2:
+    url = requests.get("https://lottie.host/321c4317-9e40-47ef-9746-6c836d6e6120/ETQ7QD5RGY.json")
+    url_json = dict()
+    if url.status_code == 200:
+        url_json = url.json()
+    else:
+        print("Error in the URL")
+    st_lottie(url_json,
+              reverse=True,
+              height=100,
+              width=100,
+              speed=1,
+              loop=True,
+              quality='high')
     st.write(list_ws_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
     st.write(f'Ταχύτητα ανέμου :dash: :green[{last_wind_speed} m/s]')
+    with st.expander("Περισσότερα"):
+        st.write(f':dash: :green[{3.6 * last_wind_speed} χλμ/ώρα]')
+        st.write(f':dash: :green[{m_s_to_bf(last_wind_speed)} Μποφόρ]')
+with col2:
+    url = requests.get("https://lottie.host/7d8cf8a1-9873-4ad5-9936-a37022d51614/dMQ4AYnYzG.json")
+    url_json = dict()
+    if url.status_code == 200:
+        url_json = url.json()
+    else:
+        print("Error in the URL")
+    st_lottie(url_json,
+              reverse=True,
+              height=100,
+              width=100,
+              speed=1,
+              loop=True,
+              quality='high')
+    st.write(list_h_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
+    st.write(f'Υγρασία :sparkle: :blue[{last_humidity}] :blue[%]')
 with col3:
+    url = requests.get("https://lottie.host/387e15ac-14bf-4416-9a93-2e6481c47788/IB9cC9BNaZ.json")
+    url_json = dict()
+    if url.status_code == 200:
+        url_json = url.json()
+    else:
+        print("Error in the URL")
+    st_lottie(url_json,
+              reverse=True,
+              height=100,
+              width=100,
+              speed=1,
+              loop=True,
+              quality='high')
     st.write(list_p_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
     st.write(f'Ατμ. πίεση :large_purple_circle: :red[{last_pressure/100} hPa]')
+
 '---'
 
 # st.write(df)
