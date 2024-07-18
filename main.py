@@ -62,6 +62,37 @@ def m_s_to_bf(ms):
         return None
 
 
+def bf_string(ms):
+    if 0 <= ms < 0.3:
+        return "Άπνοια"
+    elif 0.3 <= ms < 1.6:
+        return "Σχεδόν άπνοια"
+    elif 1.6 <= ms < 3.4:
+        return "Πολύ ασθενής"
+    elif 3.4 <= ms < 5.5:
+        return "Ασθενής"
+    elif 5.5 <= ms < 8.0:
+        return "Σχεδόν μέτριος"
+    elif 8.0 <= ms < 10.8:
+        return "Μέτριος"
+    elif 10.8 <= ms < 13.9:
+        return "Ισχυρός"
+    elif 13.9 <= ms < 17.2:
+        return "Σφοδρός / Σχεδόν Θυελλώδης"
+    elif 17.2 <= ms < 20.8:
+        return "Θυελλώδης"
+    elif 20.8 <= ms < 24.5:
+        return "Πολύ Θυελλώδης"
+    elif 24.5 <= ms < 28.5:
+        return "Θύελλα"
+    elif 28.5 <= ms < 32.7:
+        return "Βίαιη / Σφοδρή θύελλα"
+    elif ms > 32.7:
+        return "Τυφώνας"
+    else:
+        return None
+
+
 url = st.secrets["supabase"]["url"]
 key = st.secrets["supabase"]["key"]
 
@@ -242,6 +273,7 @@ with col1:
     with st.expander("Περισσότερα"):
         st.write(f':dash: :green[{3.6 * last_wind_speed} χλμ/ώρα]')
         st.write(f':dash: :green[{m_s_to_bf(last_wind_speed)} Μποφόρ]')
+        st.write(f'Χαρακτηρισμός ανέμου: :green[{bf_string(last_wind_speed)}]')
 with col2:
     url = requests.get("https://lottie.host/7d8cf8a1-9873-4ad5-9936-a37022d51614/dMQ4AYnYzG.json")
     url_json = dict()
