@@ -190,6 +190,18 @@ df['Έτος'] = df['Ημερομηνία/ώρα'].dt.strftime('%Y')
 df['Ημέρα του μήνα'] = df['Ημερομηνία/ώρα'].dt.strftime('%d')
 
 
+df_wind_speed = pd.DataFrame(data={
+    'Ημερομηνία/ώρα': list_ws_datetimes,
+    'Ταχύτητα ανέμου': list_wind_speeds
+})
+df_wind_speed['Ημερομηνία'] = df_wind_speed['Ημερομηνία/ώρα'].dt.strftime('%d %b %y')
+df_wind_speed['Ώρα'] = df_wind_speed['Ημερομηνία/ώρα'].dt.strftime('%H:%M')
+df_wind_speed['Μήνας/Έτος'] = df_wind_speed['Ημερομηνία/ώρα'].dt.strftime('%m/%Y')
+df_wind_speed['Μήν/Έτος'] = df_wind_speed['Ημερομηνία/ώρα'].dt.strftime('%-m/%Y')
+df_wind_speed['Έτος'] = df_wind_speed['Ημερομηνία/ώρα'].dt.strftime('%Y')
+df_wind_speed['Ημέρα του μήνα'] = df_wind_speed['Ημερομηνία/ώρα'].dt.strftime('%d')
+
+
 df_pressure = pd.DataFrame(data={
     'Ημερομηνία/ώρα': list_p_datetimes,
     'Πίεση': list_pressures
@@ -220,7 +232,6 @@ today_min = today_temps.loc[today_temps["Θερμοκρασία"].idxmin()]
 yesterday_temps = df.loc[(df["Ημερομηνία"] == (datetime.today() - timedelta(days=1)).strftime('%d %b %y'))
     & (df['Ώρα'] == list_datetimes[-1].strftime('%H:%M'))]
 yesterday_same_time = yesterday_temps.iloc[0]["Θερμοκρασία"]
-
 
 
 url = requests.get("https://lottie.host/22af83a1-dcdb-48a1-aebd-ebb0b74eb186/QroEcRnHao.json")
@@ -309,11 +320,6 @@ with col3:
 
 '---'
 
-# st.write(df)
-
-# st.line_chart(df, y="Θερμοκρασία", x='Ημερομηνία/ώρα')
-
-# st.header("Weather Station")
 
 tab_day, tab_month, tab_year = st.tabs(["Ημερησίως", "Μηνιαία", "Ετήσια"])
 
@@ -328,6 +334,8 @@ with tab_day:
     st.write("**Επιλεγμένη ημερομηνία:** ", f'{day.day}/{day.month}/{day.year}')
     filtered_df = df.loc[(df["Ημερομηνία/ώρα"] >= day.strftime('%Y-%m/%d')) & (df["Ημερομηνία/ώρα"] <=
                                                                                next_day.strftime('%Y-%m/%d'))]
+    filtered_df_wind_speed = df_wind_speed.loc[(df_wind_speed["Ημερομηνία/ώρα"] >= day.strftime('%Y-%m/%d')) &
+                                           (df_wind_speed["Ημερομηνία/ώρα"] <= next_day.strftime('%Y-%m/%d'))]
     filtered_df_pressure = df_pressure.loc[(df_pressure["Ημερομηνία/ώρα"] >= day.strftime('%Y-%m/%d')) &
                                            (df_pressure["Ημερομηνία/ώρα"] <= next_day.strftime('%Y-%m/%d'))]
     filtered_df_humidity = df_humidity.loc[(df_humidity["Ημερομηνία/ώρα"] >= day.strftime('%Y-%m/%d')) &
@@ -350,6 +358,9 @@ with tab_day:
             st.write(f'**Μέση:** {round(filtered_df["Θερμοκρασία"].mean(), 1)} °C')
         st.line_chart(filtered_df, y="Θερμοκρασία", x='Ώρα')
 
+    if filtered_df_wind_speed.size > 0:
+        st.line_chart(filtered_df_wind_speed, y="Ταχύτητα ανέμου", x='Ώρα')
+
     if filtered_df_pressure.size > 0:
         min_val = filtered_df_pressure.loc[filtered_df_pressure["Πίεση"].idxmin()]["Πίεση"]
         max_val = filtered_df_pressure.loc[filtered_df_pressure["Πίεση"].idxmax()]["Πίεση"]
@@ -371,6 +382,13 @@ with tab_day:
                     .highlight_min(axis=0, subset=['Θερμοκρασία'], props='background-color:blue;')
                      .format(precision=1),
                     column_order=["Ώρα", "Θερμοκρασία"],
+                    hide_index=True,
+                    use_container_width=True)
+    if filtered_df_wind_speed.size > 0:
+        st.dataframe(filtered_df_wind_speed
+                    .style.highlight_max(axis=0, subset=['Ταχύτητα ανέμου'], props='background-color:red;')
+                     .format(precision=1),
+                    column_order=["Ώρα", "Ταχύτητα ανέμου"],
                     hide_index=True,
                     use_container_width=True)
     if filtered_df_pressure.size > 0:
