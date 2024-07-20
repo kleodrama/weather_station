@@ -384,6 +384,8 @@ with tab_day:
                     column_order=["Ώρα", "Θερμοκρασία"],
                     hide_index=True,
                     use_container_width=True)
+    else:
+        st.write("Δεν υπάρχουν δεδομένα θερμοκρασίας για αυτήν την ημερμηνία.")
     if filtered_df_wind_speed.size > 0:
         st.dataframe(filtered_df_wind_speed
                     .style.highlight_max(axis=0, subset=['Ταχύτητα ανέμου'], props='background-color:red;')
@@ -391,6 +393,8 @@ with tab_day:
                     column_order=["Ώρα", "Ταχύτητα ανέμου"],
                     hide_index=True,
                     use_container_width=True)
+    else:
+        st.write("Δεν υπάρχουν δεδομένα ταχύτητας ανέμου για αυτήν την ημερμηνία.")
     if filtered_df_pressure.size > 0:
         st.dataframe(filtered_df_pressure
                     .style.highlight_max(axis=0, subset=['Πίεση'], props='background-color:red;')
@@ -399,6 +403,8 @@ with tab_day:
                     column_order=["Ώρα", "Πίεση"],
                     hide_index=True,
                     use_container_width=True)
+    else:
+        st.write("Δεν υπάρχουν δεδομένα ατμ. πίεσης για αυτήν την ημερμηνία.")
     if filtered_df_humidity.size > 0:
         st.dataframe(filtered_df_humidity
                     .style.highlight_max(axis=0, subset=['Υγρασία'], props='background-color:red;')
@@ -408,7 +414,7 @@ with tab_day:
                     hide_index=True,
                     use_container_width=True)
     else:
-        st.subheader("Δεν υπάρχουν δεδομένα για αυτήν την ημερμηνία.")
+        st.write("Δεν υπάρχουν δεδομένα υγρασίας για αυτήν την ημερμηνία.")
 
 
 def go_to_next_month():
@@ -443,6 +449,7 @@ with tab_month:
     filtered_df_month = df.loc[(df["Μήνας/Έτος"] == selected_month.strftime('%m/%Y'))]
     filtered_df_p_month = df_pressure.loc[(df_pressure["Μήνας/Έτος"] == selected_month.strftime('%m/%Y'))]
     filtered_df_h_month = df_humidity.loc[(df_humidity["Μήνας/Έτος"] == selected_month.strftime('%m/%Y'))]
+    filtered_df_ws_month = df_wind_speed.loc[(df_wind_speed["Μήνας/Έτος"] == selected_month.strftime('%m/%Y'))]
 
     c_month_1, c_month_2, c_month_3 = st.columns(3)
     with c_month_2:
@@ -477,6 +484,33 @@ with tab_month:
     st.write("Θερμοκρασία")
     chart_data = pd.DataFrame(min_max_mean, columns=["Ημέρα", "Ελάχιστη", "Μέση", "Μέγιστη"])
     st.line_chart(chart_data, x="Ημέρα", y=["Ελάχιστη", "Μέση", "Μέγιστη"])
+
+    all_ws_max = list()
+    all_ws_min = list()
+    all_ws_mean = list()
+    for i in pd.unique(filtered_df_ws_month["Ημέρα του μήνα"]):
+        # st.write(filtered_df_month)
+        # st.write(filtered_df_month["Ημέρα του μήνα"] == f'{i}')
+        current_values = filtered_df_ws_month[filtered_df_ws_month["Ημέρα του μήνα"] == f'{i}']
+        current_max = current_values["Ταχύτητα ανέμου"].max()
+        all_ws_max.append(current_max)
+        current_min = current_values["Ταχύτητα ανέμου"].min()
+        all_ws_min.append(current_min)
+        current_mean = round(current_values["Ταχύτητα ανέμου"].mean(), 1)
+        all_ws_mean.append(current_mean)
+
+    if len(all_ws_min) > 0:
+        min_max_mean_ws = pd.DataFrame(
+            data={
+                'Ημέρα': pd.unique(filtered_df_ws_month["Ημέρα του μήνα"]),
+                'Ελάχιστη': all_ws_min,
+                'Μέση': all_ws_mean,
+                'Μέγιστη': all_ws_max
+            })
+        min_max_mean_ws = min_max_mean_ws.sort_values(by=['Ημέρα'])
+        st.write("Ταχύτητα ανέμου")
+        chart_data = pd.DataFrame(min_max_mean_ws, columns=["Ημέρα", "Ελάχιστη", "Μέση", "Μέγιστη"])
+        st.line_chart(chart_data, x="Ημέρα", y=["Ελάχιστη", "Μέση", "Μέγιστη"])
 
     all_p_max = list()
     all_p_min = list()
@@ -553,6 +587,10 @@ with tab_month:
 
     st.subheader(f'{month}/{year} | Θερμοκρασία', divider='rainbow')
     st.dataframe(min_max_mean, column_order=["Ημέρα", "Ελάχιστη", "Μέση", "Μέγιστη"], hide_index=True, use_container_width=True)
+    if len(all_ws_min) > 0:
+        st.subheader(f'{month}/{year} | Ταχύτητα ανέμου', divider='rainbow')
+        st.dataframe(min_max_mean_ws, column_order=["Ημέρα", "Μέση", "Μέγιστη"], hide_index=True,
+                     use_container_width=True)
     if len(all_p_min) > 0:
         st.subheader(f'{month}/{year} | Ατμοσφαιρική Πίεση', divider='rainbow')
         st.dataframe(min_max_mean_p, column_order=["Ημέρα", "Ελάχιστη", "Μέση", "Μέγιστη"], hide_index=True,
@@ -566,6 +604,7 @@ with tab_year:
     option = st.selectbox("Επιλογή έτους", pd.unique(df["Έτος"]))
     st.write("Επιλεγμένο έτος: ", option)
     filtered_df_year = df.loc[df["Έτος"] == f'{option}']
+    filtered_df_year_ws = df_wind_speed.loc[df_wind_speed["Έτος"] == f'{option}']
     filtered_df_year_p = df_pressure.loc[df_pressure["Έτος"] == f'{option}']
     filtered_df_year_h = df_humidity.loc[df_humidity["Έτος"] == f'{option}']
     for i in range(12):
@@ -577,6 +616,10 @@ with tab_year:
     chart = alt.Chart(filtered_df_year).mark_boxplot(extent='min-max').encode(
         x='Μήν/Έτος',
         y='Θερμοκρασία'
+    )
+    chart_ws = alt.Chart(filtered_df_year_ws).mark_boxplot(extent='min-max').encode(
+        x='Μήν/Έτος',
+        y='Ταχύτητα ανέμου'
     )
 
     min_val = filtered_df_year_p.loc[filtered_df_year_p["Πίεση"].idxmin()]["Πίεση"]
@@ -591,6 +634,7 @@ with tab_year:
     )
     st.subheader(f'{option}', divider='rainbow')
     st.altair_chart(chart, theme="streamlit", use_container_width=True)
+    st.altair_chart(chart_ws, theme="streamlit", use_container_width=True)
     st.altair_chart(chart_p, theme="streamlit", use_container_width=True)
     st.altair_chart(chart_h, theme="streamlit", use_container_width=True)
 
