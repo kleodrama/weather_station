@@ -63,34 +63,54 @@ def m_s_to_bf(ms):
 
 
 def bf_string(ms):
-    if 0 <= ms < 0.3:
-        return "Άπνοια"
-    elif 0.3 <= ms < 1.6:
-        return "Σχεδόν άπνοια"
-    elif 1.6 <= ms < 3.4:
-        return "Πολύ ασθενής"
-    elif 3.4 <= ms < 5.5:
-        return "Ασθενής"
-    elif 5.5 <= ms < 8.0:
-        return "Σχεδόν μέτριος"
-    elif 8.0 <= ms < 10.8:
-        return "Μέτριος"
-    elif 10.8 <= ms < 13.9:
-        return "Ισχυρός"
-    elif 13.9 <= ms < 17.2:
-        return "Σφοδρός / Σχεδόν Θυελλώδης"
-    elif 17.2 <= ms < 20.8:
-        return "Θυελλώδης"
-    elif 20.8 <= ms < 24.5:
-        return "Πολύ Θυελλώδης"
-    elif 24.5 <= ms < 28.5:
-        return "Θύελλα"
-    elif 28.5 <= ms < 32.7:
-        return "Βίαιη / Σφοδρή θύελλα"
-    elif ms > 32.7:
-        return "Τυφώνας"
-    else:
+    all_strings = [
+        "Άπνοια",
+        "Σχεδόν άπνοια",
+        "Πολύ ασθενής",
+        "Ασθενής",
+        "Σχεδόν μέτριος",
+        "Μέτριος",
+        "Ισχυρός",
+        "Σφοδρός / Σχεδόν Θυελλώδης",
+        "Θυελλώδης",
+        "Πολύ Θυελλώδης",
+        "Θύελλα",
+        "Βίαιη / Σφοδρή θύελλα",
+        "Τυφώνας"
+    ]
+    try:
+        result = m_s_to_bf(ms)
+        return result
+    except:
         return None
+    # if 0 <= ms < 0.3:
+    #     return "Άπνοια"
+    # elif 0.3 <= ms < 1.6:
+    #     return "Σχεδόν άπνοια"
+    # elif 1.6 <= ms < 3.4:
+    #     return "Πολύ ασθενής"
+    # elif 3.4 <= ms < 5.5:
+    #     return "Ασθενής"
+    # elif 5.5 <= ms < 8.0:
+    #     return "Σχεδόν μέτριος"
+    # elif 8.0 <= ms < 10.8:
+    #     return "Μέτριος"
+    # elif 10.8 <= ms < 13.9:
+    #     return "Ισχυρός"
+    # elif 13.9 <= ms < 17.2:
+    #     return "Σφοδρός / Σχεδόν Θυελλώδης"
+    # elif 17.2 <= ms < 20.8:
+    #     return "Θυελλώδης"
+    # elif 20.8 <= ms < 24.5:
+    #     return "Πολύ Θυελλώδης"
+    # elif 24.5 <= ms < 28.5:
+    #     return "Θύελλα"
+    # elif 28.5 <= ms < 32.7:
+    #     return "Βίαιη / Σφοδρή θύελλα"
+    # elif ms > 32.7:
+    #     return "Τυφώνας"
+    # else:
+    #     return None
 
 
 url = st.secrets["supabase"]["url"]
