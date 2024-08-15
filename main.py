@@ -80,7 +80,7 @@ def bf_string(ms):
     ]
     try:
         result = m_s_to_bf(ms)
-        return result
+        return all_strings[result]
     except:
         return None
     # if 0 <= ms < 0.3:
