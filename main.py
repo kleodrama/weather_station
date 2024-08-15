@@ -302,7 +302,7 @@ with col1:
     st.write(list_ws_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
     st.write(f'Ταχύτητα ανέμου :dash: :green[{last_wind_speed} m/s]')
     with st.expander("Περισσότερα"):
-        st.write(f':dash: :green[{3.6 * last_wind_speed} χλμ/ώρα]')
+        st.write(f':dash: :green[{round(3.6 * last_wind_speed, 2)} χλμ/ώρα]')
         st.write(f':dash: :green[{m_s_to_bf(last_wind_speed)} Μποφόρ]')
         st.write(f'Χαρακτηρισμός ανέμου: :green[{bf_string(last_wind_speed)}]')
 with col2:
