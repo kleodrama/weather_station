@@ -347,7 +347,7 @@ with tab_day:
     td = datetime.today()
     st.write("**Σήμερα:** ", td.strftime("%A"), f'{td.day}/{td.month}/{td.year}')
     day = st.date_input(":date: Επιλογή ημέρας"
-                        , value="default_value_today"
+                        , value="today"
                         , format="DD/MM/YYYY"
                         )
     next_day = day + timedelta(days=1)
