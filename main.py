@@ -254,7 +254,7 @@ yesterday_temps = df.loc[(df["Ημερομηνία"] == (datetime.today() - time
 yesterday_same_time = yesterday_temps.iloc[0]["Θερμοκρασία"]
 
 
-url = requests.get("https://lottie.host/22af83a1-dcdb-48a1-aebd-ebb0b74eb186/QroEcRnHao.json")
+url = requests.get("https://lottie.host/387e15ac-14bf-4416-9a93-2e6481c47788/IB9cC9BNaZ.json")
 url_json = dict()
 if url.status_code == 200:
     url_json = url.json()
@@ -286,7 +286,7 @@ with col2:
 '---'
 col1, col2, col3 = st.columns(3)
 with col1:
-    url = requests.get("https://lottie.host/321c4317-9e40-47ef-9746-6c836d6e6120/ETQ7QD5RGY.json")
+    url = requests.get("https://lottie.host/387e15ac-14bf-4416-9a93-2e6481c47788/IB9cC9BNaZ.json")
     url_json = dict()
     if url.status_code == 200:
         url_json = url.json()
