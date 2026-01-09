@@ -424,10 +424,10 @@ st.subheader("📊 Τάσεις (Τελευταίο 24ωρο)")
 
 # Φτιάχνουμε DataFrame για εύκολο plotting
 df = pd.DataFrame({
-    'Θερμοκρασία': list_temperatures,
-    'Πίεση': list_pressures,
-    'Υγρασία': list_humidities,
-    'Άνεμος': list_wind_speeds
+    'Θερμοκρασία': list_temperatures[-10:],
+    'Πίεση': list_pressures[-10:],
+    'Υγρασία': list_humidities[-10:],
+    'Άνεμος': list_wind_speeds[-10:]
 })
 
 # Γράφημα Πίεσης (Το πιο σημαντικό)
