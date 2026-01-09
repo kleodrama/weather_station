@@ -336,7 +336,7 @@ with col3:
               loop=True,
               quality='high')
     st.write(list_p_datetimes[-1].strftime("%d/%m/%y **(%H:%M)**"))
-    st.write(f'Ατμ. πίεση :large_purple_circle: :red[{last_pressure/100} hPa]')
+    st.write(f'Ατμ. πίεση :droplet: :red[{last_pressure/100} hPa]')
 
 '---'
 
@@ -393,8 +393,8 @@ def analyze_weather(temps, press, winds, hums):
 
 # καρτέλα πρόγνωσης
 
-st.title("🌤️ Local Weather Nowcasting")
-st.caption("Πρόβλεψη βάσει τοπικών μετρήσεων (χωρίς Internet)")
+st.title("🌤️ Πρόβλεψη καιρού")
+st.caption("Πρόβλεψη βάσει των τελευταίων μετρήσεων του σταθμού")
 
 # Κλήση της συνάρτησης πρόβλεψης
 forecast_msg, status_color = analyze_weather(list_temperatures, list_pressures, list_wind_speeds, list_humidities)
@@ -410,38 +410,6 @@ elif status_color == "success":
 else:
     st.info(forecast_msg)
 
-# Εμφάνιση Τρεχουσών Μετρήσεων (Metrics)
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("Θερμοκρασία", f"{list_temperatures[-1]:.1f} °C", delta=f"{list_temperatures[-1]-list_temperatures[-2]:.1f}")
-col2.metric("Πίεση", f"{list_pressures[-1]:.1f} hPa", delta=f"{list_pressures[-1]-list_pressures[-6]:.1f} (3h)")
-col3.metric("Υγρασία", f"{list_humidities[-1]} %")
-col4.metric("Άνεμος (0-4)", f"{list_wind_speeds[-1]}", help="Κλίμακα έντασης: 3-4 = Πολύ Ισχυρός")
-
-st.divider()
-
-# Γραφήματα
-st.subheader("📊 Τάσεις (Τελευταίο 24ωρο)")
-
-# Φτιάχνουμε DataFrame για εύκολο plotting
-df_ai = pd.DataFrame({
-    'Θερμοκρασία': list_temperatures[-48:],
-    'Πίεση': list_pressures[-48:],
-    'Υγρασία': list_humidities[-48:],
-    'Άνεμος': list_wind_speeds[-48:]
-})
-
-# Γράφημα Πίεσης (Το πιο σημαντικό)
-st.write("**Βαρομετρική Πίεση** (Κλειδί για πρόγνωση)")
-st.line_chart(df_ai['Πίεση'])
-
-# Γράφημα Ανέμου & Υγρασίας
-col_g1, col_g2 = st.columns(2)
-with col_g1:
-    st.write("**Ένταση Ανέμου**")
-    st.bar_chart(df_ai['Άνεμος']) # Bar chart γιατί οι τιμές είναι διακριτές (0,1,2,3,4)
-with col_g2:
-    st.write("**Υγρασία**")
-    st.line_chart(df_ai['Υγρασία'])
 
 
 #######################
