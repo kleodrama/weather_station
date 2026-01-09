@@ -412,10 +412,10 @@ else:
 
 # Εμφάνιση Τρεχουσών Μετρήσεων (Metrics)
 col1, col2, col3, col4 = st.columns(4)
-col1.metric("Θερμοκρασία", f"{temps[-1]:.1f} °C", delta=f"{temps[-1]-temps[-2]:.1f}")
-col2.metric("Πίεση", f"{press[-1]:.1f} hPa", delta=f"{press[-1]-press[-6]:.1f} (3h)")
-col3.metric("Υγρασία", f"{hums[-1]} %")
-col4.metric("Άνεμος (0-4)", f"{winds[-1]}", help="Κλίμακα έντασης: 3-4 = Πολύ Ισχυρός")
+col1.metric("Θερμοκρασία", f"{list_temperatures[-1]:.1f} °C", delta=f"{list_temperatures[-1]-list_temperatures[-2]:.1f}")
+col2.metric("Πίεση", f"{list_pressures[-1]:.1f} hPa", delta=f"{list_pressures[-1]-list_pressures[-6]:.1f} (3h)")
+col3.metric("Υγρασία", f"{list_humidities[-1]} %")
+col4.metric("Άνεμος (0-4)", f"{list_wind_speeds[-1]}", help="Κλίμακα έντασης: 3-4 = Πολύ Ισχυρός")
 
 st.divider()
 
@@ -424,10 +424,10 @@ st.subheader("📊 Τάσεις (Τελευταίο 24ωρο)")
 
 # Φτιάχνουμε DataFrame για εύκολο plotting
 df = pd.DataFrame({
-    'Θερμοκρασία': temps,
-    'Πίεση': press,
-    'Υγρασία': hums,
-    'Άνεμος': winds
+    'Θερμοκρασία': list_temperatures,
+    'Πίεση': list_pressures,
+    'Υγρασία': list_humidities,
+    'Άνεμος': list_wind_speeds
 })
 
 # Γράφημα Πίεσης (Το πιο σημαντικό)
