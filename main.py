@@ -393,14 +393,15 @@ def analyze_weather(temps, press, winds, hums):
 
 # καρτέλα πρόγνωσης
 
-st.title("🌤️ Πρόβλεψη καιρού")
-st.caption("Πρόβλεψη βάσει των τελευταίων μετρήσεων του σταθμού")
+# st.title("🌤️ Πρόβλεψη καιρού")
 
 # Κλήση της συνάρτησης πρόβλεψης
 forecast_msg, status_color = analyze_weather(list_temperatures, list_pressures, list_wind_speeds, list_humidities)
 
 # Εμφάνιση Πρόβλεψης σε πλαίσιο
 st.subheader("🔮 Πρόγνωση Επόμενων Ωρών")
+st.caption("Πρόβλεψη βάσει των τελευταίων μετρήσεων του σταθμού")
+
 if status_color == "error":
     st.error(forecast_msg)
 elif status_color == "warning":
