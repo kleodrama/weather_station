@@ -251,7 +251,11 @@ today_min = today_temps.loc[today_temps["Θερμοκρασία"].idxmin()]
 
 yesterday_temps = df.loc[(df["Ημερομηνία"] == (datetime.today() - timedelta(days=1)).strftime('%d %b %y'))
     & (df['Ώρα'] == list_datetimes[-1].strftime('%H:%M'))]
-yesterday_same_time = yesterday_temps.iloc[0]["Θερμοκρασία"]
+if not yesterday_temps.empty:
+    yesterday_same_time = yesterday_temps.iloc[0]["Θερμοκρασία"]
+else:
+    # Αν δεν υπάρχουν, βάζουμε μια κενή τιμή (π.χ. None ή ένα string)
+    yesterday_same_time = None
 
 
 url = requests.get("https://lottie.host/387e15ac-14bf-4416-9a93-2e6481c47788/IB9cC9BNaZ.json")
