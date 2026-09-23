@@ -245,9 +245,14 @@ df_humidity['Μήν/Έτος'] = df_humidity['Ημερομηνία/ώρα'].dt.s
 df_humidity['Έτος'] = df_humidity['Ημερομηνία/ώρα'].dt.strftime('%Y')
 df_humidity['Ημέρα του μήνα'] = df_humidity['Ημερομηνία/ώρα'].dt.strftime('%d')
 
+
 today_temps = df.loc[df["Ημερομηνία"] == datetime.today().strftime('%d %b %y')]
-today_max = today_temps.loc[today_temps["Θερμοκρασία"].idxmax()]
-today_min = today_temps.loc[today_temps["Θερμοκρασία"].idxmin()]
+if not today_temps.empty:
+    today_max = today_temps.loc[today_temps["Θερμοκρασία"].idxmax()]
+    today_min = today_temps.loc[today_temps["Θερμοκρασία"].idxmin()]
+else:
+    today_max = None
+    today_min = None
 
 yesterday_temps = df.loc[(df["Ημερομηνία"] == (datetime.today() - timedelta(days=1)).strftime('%d %b %y'))
     & (df['Ώρα'] == list_datetimes[-1].strftime('%H:%M'))]
